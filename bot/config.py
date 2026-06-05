@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,6 +20,11 @@ class BotSettings(BaseSettings):
     channel_username: str = "seb0g1site"
     forward_channel: str = "seb0g1site"
     forward_enabled: bool = True
+    database_url: str = ""
 
 
-settings = BotSettings()
+_settings = BotSettings()
+if not _settings.database_url:
+    _db = Path(__file__).resolve().parent.parent / "backend" / "data" / "inetfix.db"
+    _settings.database_url = f"sqlite+aiosqlite:///{_db.as_posix()}"
+settings = _settings

@@ -6,14 +6,20 @@ from pathlib import Path
 
 import paramiko
 
-HOST = "5.129.238.210"
-USER = "root"
-PASSWORD = "kbK-RQyR587EwD"
+import os
+
+HOST = os.environ.get("DEPLOY_HOST", "5.129.238.210")
+USER = os.environ.get("DEPLOY_USER", "root")
+PASSWORD = os.environ.get("DEPLOY_PASSWORD", "")
 APP_DIR = "/opt/sebfixnet"
 ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
+    if not PASSWORD:
+        print("Set DEPLOY_PASSWORD env var", file=sys.stderr)
+        return 1
+
     env_path = ROOT / ".env"
     if not env_path.exists():
         print("Missing .env", file=sys.stderr)

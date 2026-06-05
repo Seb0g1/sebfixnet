@@ -7,6 +7,7 @@ Wants=fixnet-backend.service
 Type=simple
 User=root
 WorkingDirectory=/opt/sebfixnet/bot
+Environment=PYTHONPATH=/opt/sebfixnet/backend
 EnvironmentFile=/opt/sebfixnet/.env
 ExecStart=/opt/sebfixnet/bot/.venv/bin/python main.py
 Restart=on-failure

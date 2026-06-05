@@ -9,6 +9,14 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from config import settings
 
 
+def _database_url() -> str:
+    url = getattr(settings, "database_url", "") or ""
+    if url:
+        return url
+    db = Path(__file__).resolve().parent / "data" / "inetfix.db"
+    return f"sqlite+aiosqlite:///{db.as_posix()}"
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -28,7 +36,7 @@ class ActivationKey(Base):
     last_issued_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
-engine = create_async_engine(settings.database_url, echo=False)
+engine = create_async_engine(_database_url(), echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
