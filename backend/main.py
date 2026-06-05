@@ -56,9 +56,9 @@ app = FastAPI(
 app.include_router(admin_router)
 
 if (ROOT / "website").exists():
-    app.mount("/site", StaticFiles(directory=ROOT / "website"), name="site")
+    app.mount("/site", StaticFiles(directory=ROOT / "website", html=True), name="site")
 if (ROOT / "admin").exists():
-    app.mount("/admin", StaticFiles(directory=ROOT / "admin"), name="admin")
+    app.mount("/admin", StaticFiles(directory=ROOT / "admin", html=True), name="admin")
 
 app.add_middleware(
     CORSMiddleware,

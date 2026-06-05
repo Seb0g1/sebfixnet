@@ -3,7 +3,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import asyncSessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 import sys
@@ -15,7 +15,7 @@ from bot_models import BotUser  # noqa: E402
 from config import settings as backend_settings  # noqa: E402
 
 engine = create_async_engine(backend_settings.database_url, echo=False)
-async_session = asyncSessionmaker(engine, expire_on_commit=False)
+async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
 def utcnow():
