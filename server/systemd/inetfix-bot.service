@@ -1,0 +1,16 @@
+[Unit]
+Description=InetFix Telegram Bot
+After=network.target inetfix-backend.service
+Wants=inetfix-backend.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/inetfix/bot
+EnvironmentFile=/opt/inetfix/.env
+ExecStart=/opt/inetfix/bot/.venv/bin/python main.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

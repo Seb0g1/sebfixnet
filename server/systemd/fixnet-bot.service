@@ -1,0 +1,16 @@
+[Unit]
+Description=Fixnet Telegram Bot
+After=network.target fixnet-backend.service
+Wants=fixnet-backend.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/sebfixnet/bot
+EnvironmentFile=/opt/sebfixnet/.env
+ExecStart=/opt/sebfixnet/bot/.venv/bin/python main.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

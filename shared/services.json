@@ -1,0 +1,155 @@
+{
+  "telegram": {
+    "name": "Telegram",
+    "icon": "telegram",
+    "domains": [
+      "t.me",
+      "telegram.org",
+      "telegram.me",
+      "telegram.dog",
+      "telesco.pe",
+      "api.telegram.org",
+      "core.telegram.org",
+      "web.telegram.org",
+      "desktop.telegram.org",
+      "cdn.telegram.org"
+    ]
+  },
+  "discord": {
+    "name": "Discord",
+    "icon": "discord",
+    "domains": [
+      "discord.com",
+      "discord.gg",
+      "discordapp.com",
+      "discordapp.net",
+      "discord.media",
+      "discordcdn.com",
+      "discordstatus.com"
+    ]
+  },
+  "youtube": {
+    "name": "YouTube",
+    "icon": "youtube",
+    "domains": [
+      "youtube.com",
+      "youtu.be",
+      "googlevideo.com",
+      "ytimg.com",
+      "youtube-nocookie.com"
+    ]
+  },
+  "twitch": {
+    "name": "Twitch",
+    "icon": "twitch",
+    "domains": [
+      "twitch.tv",
+      "ttvnw.net",
+      "jtvnw.net"
+    ]
+  },
+  "chatgpt": {
+    "name": "ChatGPT",
+    "icon": "chatgpt",
+    "domains": [
+      "chatgpt.com",
+      "openai.com",
+      "oaistatic.com",
+      "oaiusercontent.com"
+    ]
+  },
+  "twitter": {
+    "name": "Twitter",
+    "icon": "twitter",
+    "domains": [
+      "twitter.com",
+      "x.com",
+      "twimg.com",
+      "t.co"
+    ]
+  },
+  "instagram": {
+    "name": "Instagram",
+    "icon": "instagram",
+    "domains": [
+      "instagram.com",
+      "cdninstagram.com"
+    ]
+  },
+  "tiktok": {
+    "name": "TikTok",
+    "icon": "tiktok",
+    "domains": [
+      "tiktok.com",
+      "tiktokcdn.com",
+      "tiktokv.com"
+    ]
+  },
+  "facebook": {
+    "name": "Facebook",
+    "icon": "facebook",
+    "domains": [
+      "facebook.com",
+      "fbcdn.net",
+      "fb.com"
+    ]
+  },
+  "cloudflare": {
+    "name": "CloudFlare",
+    "icon": "cloudflare",
+    "domains": [
+      "cloudflare.com",
+      "cloudflare-dns.com"
+    ]
+  },
+  "roblox": {
+    "name": "Roblox",
+    "icon": "roblox",
+    "domains": [
+      "roblox.com",
+      "rbxcdn.com"
+    ]
+  },
+  "soundcloud": {
+    "name": "SoundCloud",
+    "icon": "soundcloud",
+    "domains": [
+      "soundcloud.com",
+      "sndcdn.com"
+    ]
+  },
+  "whatsapp": {
+    "name": "WhatsApp",
+    "icon": "whatsapp",
+    "domains": [
+      "whatsapp.com",
+      "whatsapp.net"
+    ]
+  },
+  "notion": {
+    "name": "Notion",
+    "icon": "notion",
+    "domains": [
+      "notion.so",
+      "notion.site",
+      "notionusercontent.com"
+    ]
+  },
+  "figma": {
+    "name": "Figma",
+    "icon": "figma",
+    "domains": [
+      "figma.com",
+      "figmausercontent.com"
+    ]
+  },
+  "google_ai": {
+    "name": "Google AI",
+    "icon": "google_ai",
+    "domains": [
+      "gemini.google.com",
+      "ai.google.dev",
+      "bard.google.com"
+    ]
+  }
+}
