@@ -62,3 +62,30 @@ export async function openTelegram(): Promise<void> {
     window.open("https://t.me/Seb0g1", "_blank");
   }
 }
+
+export async function setMinimizeOnClose(enabled: boolean): Promise<void> {
+  if (!isTauriEnv()) return;
+  const { invoke } = await import("@tauri-apps/api/core");
+  await invoke("set_minimize_on_close", { enabled });
+}
+
+export function setupTrayListeners(
+  onConnect: () => void,
+  onDisconnect: () => void
+): () => void {
+  if (!isTauriEnv()) return () => {};
+
+  let unlistenConnect: (() => void) | undefined;
+  let unlistenDisconnect: (() => void) | undefined;
+
+  void (async () => {
+    const { listen } = await import("@tauri-apps/api/event");
+    unlistenConnect = await listen("tray-connect", onConnect);
+    unlistenDisconnect = await listen("tray-disconnect", onDisconnect);
+  })();
+
+  return () => {
+    unlistenConnect?.();
+    unlistenDisconnect?.();
+  };
+}

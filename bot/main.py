@@ -31,10 +31,17 @@ RELEASES_DIR = Path(__file__).resolve().parent.parent / "server" / "releases"
 
 def _find_installer() -> Path | None:
     candidates = sorted(
-        list(RELEASES_DIR.glob("FixInet*.exe")) + list(RELEASES_DIR.glob("InetFix-Setup*.exe")),
-        key=lambda p: p.name,
-        reverse=True,
+        list(RELEASES_DIR.glob("FixInet.ez-Setup*.exe"))
+        + list(RELEASES_DIR.glob("FixInet.ez_*-setup.exe"))
+        + list(RELEASES_DIR.glob("FixInet*.exe")),
+        key=lambda p: (
+            0 if "setup" in p.name.lower() else 1,
+            p.name.lower(),
+        ),
     )
+    preferred = RELEASES_DIR / "FixInet.ez-Setup-1.0.0.exe"
+    if preferred.exists():
+        return preferred
     return candidates[0] if candidates else None
 
 

@@ -1,4 +1,6 @@
+# DEPRECATED: use build-installer.ps1 (Tauri NSIS) for production builds.
 $ErrorActionPreference = "Stop"
+Write-Warning "PyInstaller portable build is deprecated. Use: .\build-installer.ps1"
 $scripts = $PSScriptRoot
 $releases = Join-Path (Split-Path (Split-Path $scripts -Parent) -Parent) "server\releases"
 $version = "1.0.0"

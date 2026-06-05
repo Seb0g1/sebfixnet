@@ -1,5 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    inetfix_lib::run();
+    fixinet_ez_lib::run();
 }

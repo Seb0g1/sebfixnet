@@ -9,6 +9,8 @@ import { loadSettings, saveSettings, updateSettings } from "./services/storage";
 import {
   getConnectionStatus,
   openTelegram,
+  setMinimizeOnClose,
+  setupTrayListeners,
   startConnection,
   stopConnection,
 } from "./services/tauri";
@@ -25,7 +27,12 @@ export default function App() {
       setScreen("activate");
     }
     getConnectionStatus().then(setConnected).catch(() => {});
+    void setMinimizeOnClose(settings.minimizeOnClose);
   }, []);
+
+  useEffect(() => {
+    void setMinimizeOnClose(settings.minimizeOnClose);
+  }, [settings.minimizeOnClose]);
 
   const handleModeChange = (mode: Mode) => {
     const next = updateSettings({ mode });
@@ -78,6 +85,18 @@ export default function App() {
     }
   }, [connected, settings]);
 
+  useEffect(() => {
+    return setupTrayListeners(
+      () => {
+        setScreen("main");
+        void handleToggleConnection();
+      },
+      () => {
+        void stopConnection().then(() => setConnected(false));
+      }
+    );
+  }, [handleToggleConnection]);
+
   const handleActivated = (key: string) => {
     const next = updateSettings({ key });
     setSettings(next);
@@ -98,6 +117,7 @@ export default function App() {
 
   const handleSaveSettings = () => {
     saveSettings(settings);
+    void setMinimizeOnClose(settings.minimizeOnClose);
     setScreen("main");
   };
 

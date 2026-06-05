@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "InetFix",
+  "productName": "FixInet.ez",
   "version": "1.0.0",
-  "identifier": "com.seb0g1.inetfix",
+  "identifier": "com.seb0g1.fixinet",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "InetFix (By Seb0g1)",
+        "title": "FixInet.ez Beta v1.0.0",
         "width": 480,
-        "height": 680,
+        "height": 720,
         "resizable": false,
         "fullscreen": false,
         "decorations": true,
@@ -23,19 +23,28 @@
     ],
     "security": {
       "csp": null
+    },
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": false
     }
   },
   "bundle": {
     "active": true,
     "targets": ["nsis"],
     "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
       "icons/icon.ico"
     ],
     "windows": {
       "nsis": {
         "displayLanguageSelector": false,
         "installerIcon": "icons/icon.ico",
-        "installMode": "currentUser"
+        "installMode": "currentUser",
+        "shortcutName": "FixInet.ez"
       }
     },
     "externalBin": [

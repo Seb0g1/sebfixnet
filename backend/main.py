@@ -253,30 +253,25 @@ async def api_download():
         releases = Path("/app/releases")
     if releases.exists():
         installers = sorted(
-            list(releases.glob("FixInet*.exe")) + list(releases.glob("InetFix-Setup*.exe")),
-            key=lambda p: p.name,
-            reverse=True,
+            list(releases.glob("FixInet.ez-Setup*.exe"))
+            + list(releases.glob("FixInet.ez_*-setup.exe"))
+            + list(releases.glob("FixInet*.exe")),
+            key=lambda p: (
+                0 if "setup" in p.name.lower() else 1,
+                p.name.lower(),
+            ),
         )
         if installers:
+            preferred = "FixInet.ez-Setup-1.0.0.exe"
+            chosen = next((p for p in installers if p.name == preferred), installers[0])
             return FileResponse(
-                installers[0],
+                chosen,
                 media_type="application/octet-stream",
-                filename=installers[0].name,
-            )
-        zips = sorted(
-            list(releases.glob("FixInet*.zip")) + list(releases.glob("InetFix-Portable*.zip")),
-            key=lambda p: p.name,
-            reverse=True,
-        )
-        if zips:
-            return FileResponse(
-                zips[0],
-                media_type="application/zip",
-                filename="FixInet.ez-Setup-1.0.0.zip",
+                filename=chosen.name,
             )
     raise HTTPException(
         status_code=404,
-        detail="Installer not found. Run app/scripts/package-portable.ps1",
+        detail="Native installer not found. Run GitHub Actions build-fixinet workflow.",
     )
 
 
