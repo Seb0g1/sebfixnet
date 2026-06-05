@@ -24,7 +24,7 @@ export function TitleBar({ onSettings, onTelegram, showBack, onBack }: TitleBarP
             </svg>
           </button>
         )}
-        <span className="titlebar-title">InetFix v1.0.0 (By Seb0g1)</span>
+        <span className="titlebar-title">FixInet.ez Beta v1.0.0 (By Seb0g1)</span>
       </div>
       {onTelegram && (
         <div className="titlebar-actions">

@@ -54,11 +54,62 @@ $$(".nav-btn").forEach((btn) => {
     $$(".tab").forEach((t) => t.classList.remove("active"));
     $(`#tab-${btn.dataset.tab}`).classList.add("active");
     if (btn.dataset.tab === "analytics") loadAnalytics();
+    if (btn.dataset.tab === "users") loadUsersKeys();
     if (btn.dataset.tab === "broadcast") { loadBroadcastHistory(); }
     if (btn.dataset.tab === "support") loadTickets("open");
     if (btn.dataset.tab === "channel") loadChannelLogs();
   });
 });
+
+let usersKeysCache = [];
+
+async function loadUsersKeys() {
+  usersKeysCache = await api("/api/admin/users-keys");
+  renderUsersTable(usersKeysCache);
+}
+
+function renderUsersTable(rows) {
+  const q = ($("#userSearch")?.value || "").toLowerCase().trim();
+  const filtered = q
+    ? rows.filter((r) =>
+        [r.display_name, r.username, r.first_name, r.key, String(r.telegram_id)]
+          .filter(Boolean)
+          .some((v) => String(v).toLowerCase().includes(q))
+      )
+    : rows;
+
+  if (!filtered.length) {
+    $("#usersTable").innerHTML = '<p class="hint">Пользователей не найдено</p>';
+    return;
+  }
+
+  $("#usersTable").innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Пользователь</th>
+          <th>Telegram ID</th>
+          <th>Ключ активации</th>
+          <th>Статус</th>
+          <th>Истекает</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filtered.map((u) => `
+          <tr>
+            <td class="name-cell">${escapeHtml(u.display_name)}${u.username ? ` <span class="hint">@${escapeHtml(u.username)}</span>` : ""}</td>
+            <td>${u.telegram_id}</td>
+            <td class="key-cell">${u.key ? escapeHtml(u.key) : "—"}</td>
+            <td><span class="badge ${u.is_active ? "active" : "inactive"}">${u.is_active ? "Активен" : "Неактивен"}</span></td>
+            <td>${u.expires_at ? new Date(u.expires_at).toLocaleDateString("ru") : "—"}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+$("#userSearch")?.addEventListener("input", () => renderUsersTable(usersKeysCache));
 
 async function loadAnalytics() {
   const d = await api("/api/admin/analytics");

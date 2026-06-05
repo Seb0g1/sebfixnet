@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot_models import BotUser, Broadcast, ChannelForwardLog, SupportTicket
 from config import settings
-from database import ActivationKey, async_session, utcnow
+from database import ActivationKey, async_session, format_key, utcnow
 from telegram_service import broadcast_to_users, send_message
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -113,6 +113,41 @@ async def list_users(session: Annotated[AsyncSession, Depends(get_session)]):
         }
         for u in users
     ]
+
+
+@router.get("/users-keys", dependencies=[Depends(verify_admin)])
+async def list_users_with_keys(session: Annotated[AsyncSession, Depends(get_session)]):
+    now = utcnow()
+    users_result = await session.execute(
+        select(BotUser).order_by(BotUser.last_seen_at.desc()).limit(500)
+    )
+    users = users_result.scalars().all()
+
+    keys_result = await session.execute(
+        select(ActivationKey)
+        .where(ActivationKey.telegram_id.is_not(None))
+        .order_by(ActivationKey.created_at.desc())
+    )
+    keys_by_user: dict[int, ActivationKey] = {}
+    for key in keys_result.scalars().all():
+        if key.telegram_id and key.telegram_id not in keys_by_user:
+            keys_by_user[key.telegram_id] = key
+
+    rows = []
+    for user in users:
+        key = keys_by_user.get(user.telegram_id)
+        display_name = user.username or user.first_name or f"ID {user.telegram_id}"
+        rows.append({
+            "telegram_id": user.telegram_id,
+            "username": user.username,
+            "first_name": user.first_name,
+            "display_name": display_name,
+            "key": format_key(key.key_value) if key else None,
+            "is_active": bool(key and key.is_active and key.expires_at > now) if key else False,
+            "expires_at": key.expires_at.isoformat() if key else None,
+            "last_seen_at": user.last_seen_at.isoformat(),
+        })
+    return rows
 
 
 @router.post("/broadcast", dependencies=[Depends(verify_admin)])

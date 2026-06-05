@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     site_url: str = "https://fixnet.sebog1.ru"
 
     # App metadata
-    app_name: str = "Fixnet"
+    app_name: str = "FixInet.ez"
     app_author: str = "Seb0g1"
     download_url: str = "https://fixnet.sebog1.ru/api/v1/download"
     support_username: str = "Seb0g1"

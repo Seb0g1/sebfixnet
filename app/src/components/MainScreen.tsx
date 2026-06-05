@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import type { Mode } from "../types";
 
 interface MainScreenProps {
   mode: Mode;
   connected: boolean;
   connecting: boolean;
+  userKey: string;
   onModeChange: (mode: Mode) => void;
   onToggleConnection: () => void;
   onSelectServices: () => void;
@@ -11,18 +13,39 @@ interface MainScreenProps {
 
 const descriptions: Record<Mode, string> = {
   combined:
-    "В комбинированном режиме InetFix работает только для выбранных сайтов или приложений, чтобы не замедлять остальные сервисы",
-  full: "В полном режиме весь интернет-трафик проходит через InetFix для максимальной защиты и стабильности",
+    "В комбинированном режиме FixInet.ez работает только для выбранных сайтов или приложений, чтобы не замедлять остальные сервисы",
+  full: "В полном режиме весь интернет-трафик проходит через FixInet.ez для максимальной защиты и стабильности",
 };
+
+function formatTimer(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return [h, m, s].map((v) => String(v).padStart(2, "0")).join(":");
+}
 
 export function MainScreen({
   mode,
   connected,
   connecting,
+  userKey,
   onModeChange,
   onToggleConnection,
   onSelectServices,
 }: MainScreenProps) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!connected) {
+      setElapsed(0);
+      return;
+    }
+    const t = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(t);
+  }, [connected]);
+
+  const shortId = userKey.replace(/\s/g, "").slice(0, 8);
+
   return (
     <div className="content">
       <button
@@ -30,10 +53,14 @@ export function MainScreen({
         onClick={onToggleConnection}
         title={connected ? "Отключить" : "Подключить"}
       >
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18.36 6.64a9 9 0 11-12.73 0" />
-          <line x1="12" y1="2" x2="12" y2="12" />
-        </svg>
+        {connected ? (
+          <span className="power-timer">{formatTimer(elapsed)}</span>
+        ) : (
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18.36 6.64a9 9 0 11-12.73 0" />
+            <line x1="12" y1="2" x2="12" y2="12" />
+          </svg>
+        )}
       </button>
 
       <p className="mode-label">Выберите режим работы:</p>
@@ -71,9 +98,18 @@ export function MainScreen({
         </button>
       )}
 
-      <p className="status-text">
-        {connecting ? "Подключение..." : connected ? "Подключено" : "Отключено"}
-      </p>
+      <div className="status-bar">
+        {connected && (
+          <div className="status-pill">
+            <span>📶</span>
+            <span className="ping">28 ms</span>
+            <span>ID: {shortId}…</span>
+          </div>
+        )}
+        <p className="status-text" style={{ margin: 0 }}>
+          {connecting ? "Подключение..." : connected ? "Подключено" : "Отключено"}
+        </p>
+      </div>
     </div>
   );
 }

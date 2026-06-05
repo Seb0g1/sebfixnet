@@ -119,6 +119,7 @@ export default function App() {
           mode={settings.mode}
           connected={connected}
           connecting={connecting}
+          userKey={settings.key}
           onModeChange={handleModeChange}
           onToggleConnection={handleToggleConnection}
           onSelectServices={() => setScreen("services")}

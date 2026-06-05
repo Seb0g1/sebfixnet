@@ -252,19 +252,27 @@ async def api_download():
     if not releases.exists():
         releases = Path("/app/releases")
     if releases.exists():
-        installers = sorted(releases.glob("InetFix-Setup*.exe"), reverse=True)
+        installers = sorted(
+            list(releases.glob("FixInet*.exe")) + list(releases.glob("InetFix-Setup*.exe")),
+            key=lambda p: p.name,
+            reverse=True,
+        )
         if installers:
             return FileResponse(
                 installers[0],
                 media_type="application/octet-stream",
                 filename=installers[0].name,
             )
-        zips = sorted(releases.glob("InetFix-Portable*.zip"), reverse=True)
+        zips = sorted(
+            list(releases.glob("FixInet*.zip")) + list(releases.glob("InetFix-Portable*.zip")),
+            key=lambda p: p.name,
+            reverse=True,
+        )
         if zips:
             return FileResponse(
                 zips[0],
                 media_type="application/zip",
-                filename="InetFix-Setup-1.0.0.zip",
+                filename="FixInet.ez-Setup-1.0.0.zip",
             )
     raise HTTPException(
         status_code=404,

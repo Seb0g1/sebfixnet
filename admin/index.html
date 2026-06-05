@@ -20,9 +20,10 @@
 
   <div id="app" class="app hidden">
     <aside class="sidebar">
-      <div class="sidebar-logo">⚡ Fixnet</div>
+      <div class="sidebar-logo"><img src="/admin/logo.png" alt="" class="sidebar-logo-img" /> FixInet.ez</div>
       <nav>
         <button class="nav-btn active" data-tab="analytics">📊 Аналитика</button>
+        <button class="nav-btn" data-tab="users">👤 Пользователи</button>
         <button class="nav-btn" data-tab="broadcast">📢 Рассылка</button>
         <button class="nav-btn" data-tab="support">💬 Поддержка</button>
         <button class="nav-btn" data-tab="channel">📡 Канал</button>
@@ -35,6 +36,16 @@
       <section id="tab-analytics" class="tab active">
         <h2>Аналитика</h2>
         <div class="stats-grid" id="statsGrid"></div>
+      </section>
+
+      <!-- Users & Keys -->
+      <section id="tab-users" class="tab">
+        <h2>Пользователи и ключи</h2>
+        <p class="hint">У каждого пользователя свой уникальный ключ активации</p>
+        <div class="search-row">
+          <input type="search" id="userSearch" placeholder="Поиск по имени, @username или ключу..." />
+        </div>
+        <div id="usersTable" class="users-table"></div>
       </section>
 
       <!-- Broadcast -->

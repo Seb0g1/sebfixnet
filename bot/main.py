@@ -1,10 +1,12 @@
 import asyncio
 import logging
+from pathlib import Path
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, CommandStart
 from aiogram.types import (
     CallbackQuery,
+    FSInputFile,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Message,
@@ -24,6 +26,29 @@ logger = logging.getLogger(__name__)
 bot = Bot(token=settings.bot_token)
 dp = Dispatcher()
 api = ApiClient()
+RELEASES_DIR = Path(__file__).resolve().parent.parent / "server" / "releases"
+
+
+def _find_installer() -> Path | None:
+    candidates = sorted(
+        list(RELEASES_DIR.glob("FixInet*.exe")) + list(RELEASES_DIR.glob("InetFix-Setup*.exe")),
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
+async def send_installer_file(message: Message) -> None:
+    installer = _find_installer()
+    if not installer:
+        return
+    try:
+        await message.answer_document(
+            FSInputFile(installer),
+            caption=f"📥 {settings.app_name} Setup",
+        )
+    except Exception:
+        logger.exception("Failed to send installer")
 
 
 def main_keyboard() -> InlineKeyboardMarkup:
@@ -108,6 +133,7 @@ async def cb_connect(callback: CallbackQuery) -> None:
         parse_mode="HTML",
         reply_markup=key_keyboard(),
     )
+    await send_installer_file(callback.message)
 
 
 async def main() -> None:
