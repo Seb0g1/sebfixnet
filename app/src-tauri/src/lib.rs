@@ -144,13 +144,10 @@ pub fn run() {
         })
         .on_window_event(|window, event| {
             if let WindowEvent::CloseRequested { api, .. } = event {
-                let minimize = window
-                    .app_handle()
-                    .state::<AppState>()
-                    .minimize_on_close
-                    .lock()
-                    .unwrap();
-                if *minimize {
+                let app_handle = window.app_handle().clone();
+                let state = app_handle.state::<AppState>();
+                let should_minimize = *state.minimize_on_close.lock().unwrap();
+                if should_minimize {
                     let _ = window.hide();
                     api.prevent_close();
                 }
