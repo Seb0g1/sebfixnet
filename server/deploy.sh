@@ -74,6 +74,6 @@ fi
 
 echo "==> Status..."
 systemctl is-active fixnet-backend fixnet-bot nginx
-curl -sf "http://127.0.0.1:8080/" | head -c 200 || echo "API check pending..."
+curl -sf "http://127.0.0.1:8090/" | head -c 200 || echo "API check pending..."
 echo ""
 echo "Deploy complete: https://$DOMAIN"
